@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Our Products</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="account.html">Account</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <P></P>
+    <P></P>
+    <main>
+        <section id="products">
+            <div class="product-grid">
+                <!-- Repeat this block for 32 products -->
+                <div class="product">
+                    <img src="images/A1.jpeg" alt="ก้นกรอง Rollo แดง บรรจุ 250 มวน">
+                    <h3>ก้นกรอง Rollo แดง บรรจุ250มวน</h3>
+                    <p>รหัสสินค้า: A1</p>
+                    <p>Price: ฿110.00</p>
+                    <button onclick="addToCart('A1', 110.00)">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <img src="product1.jpg" alt="Product 1">
+                    <h3>Product 1</h3>
+                    <p>Description of Product 1</p>
+                    <p>Price: $10.00</p>
+                    <button onclick="addToCart('Product 1', 10.00)">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Our Store</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+    
