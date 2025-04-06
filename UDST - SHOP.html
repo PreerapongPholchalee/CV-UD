@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>UDSt - SHOP</title>
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+                        <style>
+		.dark-true {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+.card {
+    background-color: #2d2d2d;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-4px);
+}
+.header {
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+.btn-primary {
+    background-color: #0066cc;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-primary:hover {
+    background-color: #0052a3;
+}
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn-danger:hover {
+    background-color: #bb2d3b;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-content {
+    background-color: #2d2d2d;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.close-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+.close-btn:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+.input {
+    background-color: #3d3d3d;
+    border: 1px solid #4d4d4d;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.language-selector {
+    background-color: #3d3d3d;
+    color: white;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #4d4d4d;
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #4d4d4d;
+    margin-bottom: 10px;
+}
+.cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+.cart-item-details {
+    flex-grow: 1;
+}
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.quantity-btn {
+    background-color: #4d4d4d;
+    border: none;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.quantity-btn:hover {
+    background-color: #5d5d5d;
+}
+.cart-summary {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #4d4d4d;
+}
+</style>
+    </head>
+    <body class="dark-true min-h-screen">
+        <!-- Header -->
+        </header>
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">UDSt - SHOP</h1>
+                <nav class="flex items-center space-x-4">
+                    <select id="languageSelect" class="language-selector">
+                        <option value="th">ไทย</option>
+                        <option value="en">English</option>
+                    </select>
+                    <div class="relative">
+                        <button class="text-white" onclick="toggleCartModal()">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                        <div id="cartBadge" class="badge" style="display: none">0</div>
+                    </div>
+                    <button class="text-white" onclick="toggleMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button class="text-white" onclick="toggleLoginModal()">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- Search Bar -->
+        <div class="container mx-auto my-4 px-4">
+            <div class="flex">
+                <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." class="input flex-grow">
+                    <button class="btn-primary ml-2" onclick="searchProducts()">
+                        <i class="fas fa-search"></i>
+                    </button>
+            </div>
+        </div>
+        <main class="container mx-auto my-8 px-4">
+            <br>
+            <!-- Products Grid -->
+            
+            <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Products will be dynamically inserted here -->
+            </div>
+        </main>
+        
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="toggleLoginModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-header">
+                    <h2 id="modalTitle" class="text-xl font-bold">เข้าสู่ระบบ</h2>
+                </div>
+                <form id="loginForm" onsubmit="handleSubmit(event)">
+                    <div id="registerFields" style="display: none;">
+                        <input type="text" placeholder="ชื่อ" class="input" required>
+                            <input type="text" placeholder="นามสกุล" class="input" required>
+                                <input type="tel" placeholder="เบอร์โทรศัพท์" class="input" required>
+                                    <textarea placeholder="ที่อยู่จัดส่ง" class="input" required></textarea>
+                                </div>
+                    <input type="email" placeholder="อีเมล" class="input" required>
+                        <input type="password" placeholder="รหัสผ่าน" class="input" required>
+                            <button type="submit" class="btn-primary w-full">ยืนยัน</button>
+                            <button type="button" class="text-blue-400 mt-4" onclick="toggleRegister()">
+                                <span id="toggleRegisterText">ยังไม่มีบัญชี? สมัครสมาชิก</span>
+                            </button>
+                        </form>
+            </div>
+        </div>
+        
+        <!-- Cart Modal -->
+        <div id="cartModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="toggleCartModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-header">
+                    <h2 class="text-xl font-bold">ตะกร้าสินค้า</h2>
+                </div>
+                <div id="cartItems">
+                    <!-- Cart items will be dynamically inserted here -->
+                </div>
+                <div id="cartSummary" class="cart-summary">
+                    <!-- Cart summary will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+        
+         <script>
+	
+    // Data
+    const products = [
+                 { id: 1, name: { th: 'ก้นกรองเปล่าร้อน ROLLO บรรจุ 250 มวน', en: 'HOT EMPTY FILTER BOTTOM ROLLO CONTAINS 250 ROLLS.' }, price: 110,image: 'https://v-ud.com/wp-content/uploads/2024/11/A1.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 2, name: { th: 'ก้นกรองเปล่าร้อน INVICTUS บรรจุ 250 มวน', en: 'INVICTUS hot empty filter bottom contains 250 rounds' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/A2.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 3, name: { th: 'ก้นกรองเปล่าร้อน Firebox บรรจุ 300 มวน', en: 'Firebox hot empty filter bottom contains 300 rounds' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/A3.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 4, name: { th: 'ก้นกรองเปล่าร้อน CARTEL บรรจุ 300 มวน', en: 'HOT EMPTY FILTER BOTTOM FIREBOX RED 1 BOX 300' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/A4.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 5, name: { th: 'ก้นกรองเปล่าร้อน INVICTUS บรรจุ 500 มวน', en: 'INVICTUS hot empty filter bottom contains 500 rounds.' }, price: 150, image: 'https://v-ud.com/wp-content/uploads/2024/11/A5.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 6, name: { th: 'ก้นกรองเปล่าร้อน Firebox บรรจุ 1000 มวน', en: 'Firebox hot empty filter bottom contains 1000 rounds.' }, price: 320, image: 'https://v-ud.com/wp-content/uploads/2024/11/A6.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 7, name: { th: 'ก้นกรองเปล่าร้อน INVICTUS บรรจุ 1000 มวน', en: 'INVICTUS hot empty filter bottom contains 1000 rounds.' }, price: 270, image: 'https://v-ud.com/wp-content/uploads/2024/11/A7.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 8, name: { th: 'ก้นกรองเปล่าเย็น INVICTUS บรรจุ 200 มวน', en: 'INVICTUS cold empty filter bottom contains 200 rounds.' }, price: 120, image: 'https://v-ud.com/wp-content/uploads/2024/11/B1.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 9, name: { th: 'ก้นกรองเปล่าเย็น INVICTUS บรรจุ 200มวน เย็นสุดขั้ว 24 มิล', en: 'INVICTUS cold empty filter bottom contains 200 rounds, extremely cold 24 millimetre.' }, price: 120, image: 'https://v-ud.com/wp-content/uploads/2024/11/B2.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 10, name: { th: 'ก้นกรองเปล่าเย็น DMB บรรจุ 200มวน เย็นสุดขั้ว 24 มิล', en: 'DMB empty cold filter bottom contains 200 rounds, extremely cold 24 millilitres.' }, price: 120, image: 'https://v-ud.com/wp-content/uploads/2024/11/B2s.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 11, name: { th: 'ก้นกรองเปล่าเย็น ROLLO บรรจุ 200 มวน', en: 'ROLLO cold empty filter bottom contains 200 rolls' }, price: 120, image: 'https://v-ud.com/wp-content/uploads/2024/11/B3.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 12, name: { th: 'ก้นกรองเปล่าเย็น Firebox บรรจุ 250 มวน', en: 'Firebox cold empty filter bottom contains 250 bars' }, price: 120, image: 'https://v-ud.com/wp-content/uploads/2024/11/B4.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 13, name: { th: 'ก้นกรองเปล่า เม็ดบีบ Fresh Bomb บรรจุ 100 มวน กลิ่น เบอร์รี่ มิ้น', en: 'Empty filter bottom, Fresh Bomb squeeze tablets, 100 pieces, berry mint scent' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/C1.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 14, name: { th: 'ก้นกรองเปล่า เม็ดบีบ Fresh Bomb บรรจุ 100 มวน กลิ่น สตร์อวเบอรี่', en: 'Empty filter bottom, Fresh Bomb squeeze tablets, 100 pieces, Strawberry flavour' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/C2.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 15, name: { th: 'ก้นกรองเปล่า เม็ดบีบ Fresh Bomb บรรจุ 100 มวน กลิ่น เมนทอล', en: 'Empty filter bottom, Fresh Bomb squeeze, 100 pieces, menthol flavour' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/C3.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 16, name: { th: 'ก้นกรองเปล่า เม็ดบีบ Fresh Bomb บรรจุ 100 มวน กลิ่น สตร์องมิ้น', en: 'Empty filter bottom, Fresh Bomb squeeze, 100 pieces, mint flavour.' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/C4.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 17, name: { th: 'ก้นกรองเปล่า เม็ดบีบ SEDUCE บรรจุ 100 มวน กลิ่น สตร์อเบอรี่', en: 'Empty filter bottom, SEDUCE squeezer, 100 pieces, strawberry flavour' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/C5.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 18, name: { th: 'ก้นกรองเปล่า เม็ดบีบ SEDUCE บรรจุ 100 มวน กลิ่น บลูเบอรี่', en: 'Empty filter bottom, SEDUCE squeeze tablets, 100 pieces, blueberry scent' }, price: 110, image: 'https://v-ud.com/wp-content/uploads/2024/11/C6.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 19, name: { th: 'ก้นกรองเปล่าร้อน Firebox บรรจุ 250 มวน เบอรี่มิ้น', en: 'Firebox hot empty filter bottom contains 250 mint berries.' }, price: 135, image: 'https://v-ud.com/wp-content/uploads/2024/11/D1.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 20, name: { th: 'ก้นกรองเปล่า มวนดำ SEDUCE บรรจุ 300 มวน', en: 'Empty filter bottom, black round, SEDUCE, 300 round' }, price: 160, image: 'https://v-ud.com/wp-content/uploads/2024/11/D2.jpeg', unit: 'กล่อง', category: 'filter', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 21, name: { th: 'เครื่องอัด ไฟฟ้า Firebox', en: 'Firebox electric compressor' }, price: 390, image: 'https://v-ud.com/wp-content/uploads/2024/11/FB.jpeg', unit: 'เครื่อง', category: 'accessory', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 22, name: { th: 'เครื่องอัด พกพา Firebox', en: 'Firebox Portable Compressor' }, price: 180, image: 'https://v-ud.com/wp-content/uploads/2024/11/FD1.jpeg', unit: '1อัน', category: 'accessory', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 23, name: { th: 'เครื่องอัด พกพา FD2', en: 'FD2 Portable Compressor' }, price: 140, image: 'https://v-ud.com/wp-content/uploads/2024/11/FD2.jpeg', unit: '1อัน', category: 'accessory', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 24, name: { th: 'กล่องเก็บมวน Firebox ดำ', en: 'Black Firebox Storage Box' }, price: 99, image: 'https://v-ud.com/wp-content/uploads/2024/11/BOX1.jpeg', unit: 'กล่อง', category: 'accessory', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 25, name: { th: 'กล่องเก็บมวน Firebox ทอง', en: 'Firebox gold storage box' }, price: 99, image: 'https://v-ud.com/wp-content/uploads/2024/11/BOX2.jpeg', unit: 'กล่อง', category: 'accessory', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 26, name: { th: 'Yasen SK', en: 'Yasen SK' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y1.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 27, name: { th: 'Yasen MBR', en: 'Yasen MBR' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y2.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 28, name: { th: 'Yasen LM', en: 'Yasen LM' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y3.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 29, name: { th: 'Yasen KT', en: 'Yasen KT' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y4.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 30, name: { th: 'Yasen L&M', en: 'Yasen L&M' }, price: 60, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y5.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 31, name: { th: 'Yasen K&T', en: 'Yasen K&T' }, price: 60, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y6.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 32, name: { th: 'Yasen 85', en: 'Yasen 85' }, price: 60, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y7.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 33, name: { th: 'Yasen KRUNG TONG', en: 'Yasen KRUNG TONG' }, price: 60, image: 'https://v-ud.com/wp-content/uploads/2024/11/Y8.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 34, name: { th: 'Yasen V.L- LM', en: 'Yasen V.L- LM' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/V1.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 35, name: { th: 'Yasen V.K- KrongTip', en: 'Yasen V.K- KrongTip' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/V2.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' },
+                 { id: 36, name: { th: 'Yasen V.W-WONRDER', en: 'Yasen V.W-WONRDER' }, price: 70, image: 'https://v-ud.com/wp-content/uploads/2024/11/V3.jpeg', unit: '1pack', category: 'tobacco', description: 'ก้นกรองประสิทธิภาพสูง ให้รสชาติที่นุ่มนวล' }
+        ];
+
+const translations = {
+    th: {
+        search: 'ค้นหาสินค้า...',
+        addToCart: 'เพิ่มลงตะกร้า',
+        login: 'เข้าสู่ระบบ',
+        register: 'สมัครสมาชิก',
+        noAccount: 'ยังไม่มีบัญชี? สมัครสมาชิก',
+        haveAccount: 'มีบัญชีอยู่แล้ว? เข้าสู่ระบบ',
+        cart: 'ตะกร้าสินค้า',
+        total: 'ยอดรวม',
+        checkout: 'ชำระเงิน',
+        emptyCart: 'ไม่มีสินค้าในตะกร้า'
+    },
+    en: {
+        search: 'Search products...',
+        addToCart: 'Add to Cart',
+        login: 'Login',
+        register: 'Register',
+        noAccount: 'No account? Register',
+        haveAccount: 'Have an account? Login',
+        cart: 'Shopping Cart',
+        total: 'Total',
+        checkout: 'Checkout',
+        emptyCart: 'Your cart is empty'
+    }
+};
+
+// State
+let currentLang = 'th';
+let cartItems = [];
+let isRegistering = false;
+
+// Functions
+function renderProducts(productsToRender = products) {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = productsToRender.map(product => `
+        <div class="card p-4">
+            <h3 class="text-lg font-bold mb-2">${product.name[currentLang]}</h3>
+            <img src="${product.image}" alt="${product.name[currentLang]}" class="w-full h-40 object-cover mb-2">
+            <p class="text-lg font-bold mb-4">${product.price.toLocaleString()} ฿</p>
+            <button class="btn-primary w-full" onclick="addToCart(${product.id})">
+                ${translations[currentLang].addToCart}
+            </button>
+        </div>
+    `).join('');
+}
+
+function increaseQuantity(itemId) {
+    const itemIndex = cartItems.findIndex(item => item.id === itemId);
+    if (itemIndex !== -1) {
+        cartItems[itemIndex].quantity = (cartItems[itemIndex].quantity || 1) + 1;
+    }
+    renderCartItems();
+}
+
+// ฟังก์ชันลดจำนวนสินค้าหรือลบออกจากตะกร้า
+function removeFromCart(itemId, quantity = 1) {
+    const itemIndex = cartItems.findIndex(item => item.id === itemId);
+    if (itemIndex !== -1) {
+        cartItems[itemIndex].quantity -= quantity;
+        if (cartItems[itemIndex].quantity <= 0) {
+            cartItems.splice(itemIndex, 1);
+        }
+    }
+    renderCartItems();
+}
+
+function toggleCartModal() {
+        const cartModal = document.getElementById('cartModal');
+        cartModal.style.display = (cartModal.style.display === 'none' || cartModal.style.display === '') ? 'block' : 'none';
+        renderCartItems();
+    }
+function renderCartItems() {
+    const cartContainer = document.getElementById('cartItems');
+    const cartSummary = document.getElementById('cartSummary');
+
+    if (cartItems.length === 0) {
+        cartContainer.innerHTML = `
+            <p class="text-center py-4">${translations[currentLang].emptyCart}</p>
+        `;
+        cartSummary.innerHTML = '';
+        return;
+    }
+
+    // Group items by ID and count quantities
+    const groupedItems = cartItems.reduce((acc, item) => {
+        if (!acc[item.id]) {
+            acc[item.id] = { ...item, quantity: 0 };
+        }
+        acc[item.id].quantity++;
+        return acc;
+    }, {});
+
+    cartContainer.innerHTML = Object.values(groupedItems).map(item => `
+        <div class="cart-item">
+            <img src="${item.image}" alt="${item.name[currentLang]}">
+            <div class="cart-item-details">
+                <h3 class="font-bold">${item.name[currentLang]}</h3>
+                <p>${item.price.toLocaleString()} ฿</p>
+                <div class="quantity-control">
+                    <button class="quantity-btn" onclick="removeFromCart(${item.id}, 1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                    <button class="btn-danger ml-4" onclick="removeFromCart(${item.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+    cartSummary.innerHTML = `
+        <div class="flex justify-between items-center mb-4">
+            <span class="font-bold">${translations[currentLang].total}:</span>
+            <span class="text-xl font-bold">${total.toLocaleString()} ฿</span>
+        </div>
+        <button class="btn-primary w-full">${translations[currentLang].checkout}</button>
+    `;
+}
+window.onclick = function(event) {
+       const cartModal = document.getElementById('cartModal');
+       if (event.target == cartModal) {
+           cartModal.style.display = "none";
+       }
+   };
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            cartItems.push(product);
+            updateCartBadge();
+        }
+    }
+
+    function updateCartBadge() {
+        const badge = document.getElementById('cartBadge');
+        if (cartItems.length > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = cartItems.length;
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+
+    function searchProducts() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = products.filter(product =>
+            product.name[currentLang].toLowerCase().includes(searchTerm)
+        );
+        renderProducts(filtered);
+    }
+
+    function toggleLoginModal() {
+        const modal = document.getElementById('loginModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function toggleRegister() {
+        isRegistering = !isRegistering;
+        const registerFields = document.getElementById('registerFields');
+        const modalTitle = document.getElementById('modalTitle');
+        const toggleText = document.getElementById('toggleRegisterText');
+        
+        registerFields.style.display = isRegistering ? 'block' : 'none';
+        modalTitle.textContent = translations[currentLang][isRegistering ? 'register' : 'login'];
+        toggleText.textContent = translations[currentLang][isRegistering ? 'haveAccount' : 'noAccount'];
+    }
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        // Handle form submission here
+        console.log('Form submitted');
+        toggleLoginModal();
+    }
+
+    function changeLang() {
+        currentLang = document.getElementById('languageSelect').value;
+        document.getElementById('searchInput').placeholder = translations[currentLang].search;
+        renderProducts();
+    }
+
+    // Event Listeners
+    document.getElementById('languageSelect').addEventListener('change', changeLang);
+
+    // Initial render
+    renderProducts();
+
+	</script>
+    </body>
+    </htmL>
